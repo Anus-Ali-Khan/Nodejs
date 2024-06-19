@@ -43,48 +43,15 @@ app.use(express.urlencoded({ extended: false })); //app.use denotes middleware
 //built-in middleware for json
 app.use(express.json());
 
-//serve static files
-app.use(express.static(path.join(__dirname, "/public")));
+//serve static(apply css to our files) files
+app.use("/", express.static(path.join(__dirname, "/public")));
+app.use("/subdir", express.static(path.join(__dirname, "/public")));
 
-app.get("^/$|/index", (req, res) => {
-  //   res.sendFile("./views/index.html", { root: __dirname });
-  res.sendFile(path.join(__dirname, "views", "index.html"));
-});
-app.get("/new-page(.html)?", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "new-page.html"));
-});
-app.get("/old-page(.html)?", (req, res) => {
-  res.redirect(301, "/new-page.html"); //by default 302
-});
-
-//Route Handlers
-app.get(
-  "/hello(.html)?",
-  (req, res, next) => {
-    console.log("attempted to load hello.html");
-    next();
-  },
-  (req, res) => {
-    res.send("Hello World!");
-  }
-);
-
-//Chain Route handlers
-
-const one = (req, res, next) => {
-  console.log("one");
-  next();
-};
-const two = (req, res, next) => {
-  console.log("two");
-  next();
-};
-const three = (req, res, next) => {
-  console.log("three");
-  res.send("Finished");
-};
-
-app.get("/chain(.html)?", [one, two, three]);
+//routes
+app.use("/", require("./routes/root"));
+app.use("/subdir", require("./routes/subdir"));
+//employees api
+app.use("/employees", require("./routes/api/employees"));
 
 app.all("*", (req, res) => {
   res.status(404);
