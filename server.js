@@ -34,9 +34,12 @@ app.use("/", express.static(path.join(__dirname, "/public")));
 
 //routes
 app.use("/", require("./routes/root"));
-
-//employees api
+//employees routes
 app.use("/employees", require("./routes/api/employees"));
+//user routes
+app.use("/register", require("./routes/register"));
+//auth routes
+app.use("/auth", require("./routes/auth"));
 
 app.all("*", (req, res) => {
   res.status(404);
