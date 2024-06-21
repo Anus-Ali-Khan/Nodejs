@@ -49,6 +49,8 @@ const handleLogin = async (req, res) => {
     //Since it is not secure to save refresh token in local storage so we are saving it as a cookie and as http only because http is not available to javascript
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
+      sameSite: "None",
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.json({ accessToken });

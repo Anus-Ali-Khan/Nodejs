@@ -6,6 +6,8 @@ const corsOptions = require("./config/corsOptions");
 const { logger } = require("./middlewares/logEvents");
 const errorHandler = require("./middlewares/errorHandler");
 const verifyJWT = require("./middlewares/verifyJWT");
+const cookieParser = require("cookie-parser");
+const credentials = require("./middlewares/credentials");
 const PORT = process.env.PORT || 3500;
 
 //Middlewares : All those things b/w request and response are middlewares
@@ -17,8 +19,11 @@ const PORT = process.env.PORT || 3500;
 //Custom middlewares
 app.use(logger);
 
-//Cross Origin Resource Sharing
+//Handle Options credentials check - before CORS
+// and fetch cookies credentials requirements
+app.use(credentials);
 
+//Cross Origin Resource Sharing
 app.use(cors(corsOptions));
 
 /* builtin middleware: to handle url-encoded data
@@ -30,6 +35,9 @@ app.use(express.urlencoded({ extended: false })); //app.use denotes middleware
 //built-in middleware for json
 app.use(express.json());
 
+//middleware for cookies
+app.use(cookieParser());
+
 //serve static(apply css to our files) files
 app.use("/", express.static(path.join(__dirname, "/public")));
 
@@ -37,6 +45,8 @@ app.use("/", express.static(path.join(__dirname, "/public")));
 app.use("/", require("./routes/root"));
 app.use("/register", require("./routes/register"));
 app.use("/auth", require("./routes/auth"));
+app.use("/refresh", require("./routes/refresh"));
+app.use("/logout", require("./routes/logout"));
 
 //employees routes (any route after verifyJWT will require jwt token in header for verification)
 app.use(verifyJWT);
