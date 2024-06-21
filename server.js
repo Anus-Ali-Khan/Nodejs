@@ -5,6 +5,7 @@ const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 const { logger } = require("./middlewares/logEvents");
 const errorHandler = require("./middlewares/errorHandler");
+const verifyJWT = require("./middlewares/verifyJWT");
 const PORT = process.env.PORT || 3500;
 
 //Middlewares : All those things b/w request and response are middlewares
@@ -34,12 +35,12 @@ app.use("/", express.static(path.join(__dirname, "/public")));
 
 //routes
 app.use("/", require("./routes/root"));
-//employees routes
-app.use("/employees", require("./routes/api/employees"));
-//user routes
 app.use("/register", require("./routes/register"));
-//auth routes
 app.use("/auth", require("./routes/auth"));
+
+//employees routes (any route after verifyJWT will require jwt token in header for verification)
+app.use(verifyJWT);
+app.use("/employees", require("./routes/api/employees"));
 
 app.all("*", (req, res) => {
   res.status(404);
