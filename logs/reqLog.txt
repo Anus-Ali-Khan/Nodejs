@@ -144,3 +144,5 @@
 20240622	15:23:03	eef1c20b-793f-45fd-a455-14f685a3c2e0	POST	undefined	/employees
 20240622	15:25:34	9a9ce56e-4685-4939-84b5-03416d8724b9	POST	undefined	/auth
 20240622	15:25:59	8c274706-bace-46dc-b045-9dda62d1a261	DELETE	undefined	/employees
+20240702	12:47:21	df00fccc-6a9c-45e1-ac8e-5da28b6d751a	POST	undefined	/register
+20240702	12:49:04	47aff8a6-3103-4f72-8ffd-a28865e3805a	POST	undefined	/register
