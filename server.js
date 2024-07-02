@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -8,7 +9,12 @@ const errorHandler = require("./middlewares/errorHandler");
 const verifyJWT = require("./middlewares/verifyJWT");
 const cookieParser = require("cookie-parser");
 const credentials = require("./middlewares/credentials");
+const mongoose = require("mongoose");
+const connectDB = require("./config/dbConn");
 const PORT = process.env.PORT || 3500;
+
+//Connect to MongoDB
+connectDB();
 
 //Middlewares : All those things b/w request and response are middlewares
 //There are 3 types of middlewares:
@@ -66,4 +72,7 @@ app.all("*", (req, res) => {
 // Custom Error handling
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+mongoose.connection.once("open", () => {
+  console.log("Connected to MongoDB");
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
