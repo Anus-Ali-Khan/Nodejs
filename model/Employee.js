@@ -6,7 +6,7 @@ const employeeSchema = new Schema({
     type: String,
     require: true,
   },
-  lasttname: {
+  lastname: {
     type: String,
     require: true,
   },
